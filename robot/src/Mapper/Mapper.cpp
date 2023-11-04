@@ -26,8 +26,6 @@ void SLAM::Mapper::processMeasurementData(MeasurementNode measurement[], unsigne
 
     if(measurementCount % 10 == 0)
     {
-        std::cout << "Measurement count: " << measurementCount << std::endl;
-
         // Make a string stream for CURL request
         std::stringstream ss;
         ss << "curl -X POST http://localhost:8080/upload -H \"Content-Type: application/json\" -d";
@@ -55,8 +53,19 @@ void SLAM::Mapper::processMeasurementData(MeasurementNode measurement[], unsigne
         }
         ss << "]}'";
 
-        std::string command = ss.str();
-        system(command.c_str());
+        // Pipe output to /dev/null
+        ss << " > /dev/null 2>&1";
+
+
+        try
+        {
+            std::string command = ss.str();
+            system(command.c_str());
+        }
+        catch (...)
+        {
+            std::cout << "Failed to upload map data" << std::endl;
+        }
     }
 }
 

@@ -23,7 +23,7 @@ def addPlot():
         angles[i] = math.radians(angles[i])
 
     plt.clf()
-    plt.polar(angles, distances, 'ro')
+    plt.polar(angles, distances, 'ro', markersize=1)
     plt.savefig('./static/map.png')
     
     return json.dumps({'status': 1})
