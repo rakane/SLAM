@@ -91,7 +91,7 @@ void SLAM::Mapper::uploadMapData(MeasurementNode measurement[], unsigned int num
     ss << " \"distance\": [" << distanceSStream.str() << "],";
     ss << " \"x\": [" << xSStream.str() << "],";
     ss << " \"y\": [" << ySStream.str() << "],";
-    ss << " \"resolution\": " << ANGLE_RESOLUTION << "}'";
+    ss << " \"resolution\": " << CARTESTIAN_MAP_RESOLUTION << "}'";
 
     // Pipe output to /dev/null
     ss << " > /dev/null 2>&1";

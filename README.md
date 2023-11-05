@@ -30,3 +30,10 @@ This is a working experiment to create a basic SLAM robot using a RPLidar A1 and
   - [SLAM for Dummies (PDF)](https://dspace.mit.edu/bitstream/handle/1721.1/119149/16-412j-spring-2005/contents/projects/1aslam_blas_repo.pdf)
   - [Simultaneous Localisation and Mapping (SLAM):
     Part I The Essential Algorithms (PDF)](https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/readings/Durrant-Whyte_Bailey_SLAM-tutorial-I.pdf)
+
+## Map Display Plots
+
+By default the python server will serve a website on port 8080, which can be used to view the map plots. Example plots are saved in the server/static folder.
+
+![Polar Map](server/static/polar_map.png)
+![Cartesian Map](server/static/cartesian_map.png)
