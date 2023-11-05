@@ -109,6 +109,10 @@ void SLAM::Lidar::run()
 
                 mapper_->processMeasurementData(measurement, measurementIdx + 1);
             }
+            else
+            {
+                std::cout << "Error, cannot grab scan data. result = " << std::hex << opResult_ << std::endl;
+            }
         }        
     }
 }

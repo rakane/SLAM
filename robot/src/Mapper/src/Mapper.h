@@ -16,7 +16,7 @@ namespace SLAM
     class Mapper
     {
     public:
-        Mapper(bool enableMapUploading = true);
+        Mapper(double uploadInterval = 0.0, bool enableMapUploading = true);
         ~Mapper();
         
         void reset();
@@ -27,6 +27,12 @@ namespace SLAM
         Map map_;
 
         bool enableMapUploading_;
+
+        bool throttleUploads_;
+
+        double uploadInterval_;
+
+        std::chrono ::time_point<std::chrono::system_clock> lastUploadTime_;
     };
 }
 

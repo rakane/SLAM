@@ -1,6 +1,40 @@
+const LOAD_DIRECT = true;
+
+function loadPolarImage() {
+  $.ajax({
+    url: "/image/polar",
+    type: "GET",
+    success: function (data) {
+      if (typeof data.image === "string") {
+        if (data.image.length === 0) {
+          return;
+        }
+
+        $("#polar img").attr("src", `data:image/png;base64,${data.image}`);
+      }
+    },
+  });
+}
+
+function loadCartesianImage() {
+  $.ajax({
+    url: "/image/cartesian",
+    type: "GET",
+    success: function (data) {
+      if (typeof data.image === "string") {
+        if (data.image.length === 0) {
+          return;
+        }
+
+        $("#cartesian img").attr("src", `data:image/png;base64,${data.image}`);
+      }
+    },
+  });
+}
+
 $(document).ready(function () {
-  $("#polar").html('<img src="/image/polar"/>');
-  $("#cartesian").html('<img src="/image/cartesian"/>');
+  $("#polar").html('<img src="/image/polar/direct" />');
+  $("#cartesian").html('<img src="/image/cartesian/direct" />');
 });
 
 let isVisible = true;
@@ -8,8 +42,6 @@ let isVisible = true;
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     isVisible = true;
-    $("#polar").html('<img src="/image/polar"/>');
-    $("#cartesian").html('<img src="/image/cartesian"/>');
   } else {
     isVisible = false;
   }
@@ -20,19 +52,11 @@ window.setInterval(function () {
     return;
   }
 
-  $.ajax({
-    url: "/image/polar",
-    type: "GET",
-    success: function (data) {
-      $("#polar img").attr("src", `data:image/png;base64,${data.image}`);
-    },
-  });
-
-  $.ajax({
-    url: "/image/cartesian",
-    type: "GET",
-    success: function (data) {
-      $("#cartesian img").attr("src", `data:image/png;base64,${data.image}`);
-    },
-  });
-}, 1000);
+  if (LOAD_DIRECT) {
+    loadPolarImage();
+    loadCartesianImage();
+  } else {
+    $("#polar").html('<img src="/image/polar/direct" />');
+    $("#cartesian").html('<img src="/image/cartesian/direct" />');
+  }
+}, 250);
