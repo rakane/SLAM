@@ -82,6 +82,8 @@ void SLAM::Lidar::run()
         driver_->startScan(0,1);    
         status_ = LidarStatus::RUNNING;
 
+        std::cout << "Running lidar..." << std::endl;
+
         while(status_ == LidarStatus::RUNNING)
         {
             // Fetch data from LIDAR
@@ -115,6 +117,8 @@ void SLAM::Lidar::run()
             }
         }        
     }
+
+    std::cout << "Exiting lidar run loop..." << std::endl;
 }
 
 void SLAM::Lidar::shutdown()

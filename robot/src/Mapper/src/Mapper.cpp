@@ -23,15 +23,10 @@ void SLAM::Mapper::reset()
 void SLAM::Mapper::processMeasurementData(MeasurementNode measurement[], unsigned int numMeasurements)
 {
     // Update map
-    std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
     for(unsigned int measIdx = 0; measIdx < numMeasurements; measIdx++)
     {
         map_.updateMap(measurement[measIdx]);
     }
-    std::chrono::time_point<std::chrono::high_resolution_clock> end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Map update took " << elapsed.count() << " seconds" << std::endl;
-
 
     // Upload map data if enabled
     if(enableMapUploading_)
@@ -56,8 +51,6 @@ void SLAM::Mapper::processMeasurementData(MeasurementNode measurement[], unsigne
 
 void SLAM::Mapper::uploadMapData(MeasurementNode measurement[], unsigned int numMeasurements) const
 {
-    std::cout << "Uploading map data" << std::endl;
-
     // Map data
     const SLAM::PolarMap& polarMap = map_.getPolarMap();
     const SLAM::CartesianMap& cartesianMap = map_.getCartesianMap();
