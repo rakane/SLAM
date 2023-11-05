@@ -1,5 +1,6 @@
 # Server image
-server/static/map.png
+server/static/polar_map.png
+server/static/cartesian_map.png
 
 # Object files
 *.o

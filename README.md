@@ -33,7 +33,7 @@ This is a working experiment to create a basic SLAM robot using a RPLidar A1 and
 
 ## Map Display Plots
 
-By default the python server will serve a website on port 8080, which can be used to view the map plots. Example plots are saved in the server/static folder.
+By default the python server will serve a website on port 8080, which can be used to view the map plots. The plots are generated via matplotlib and saved to the `static` folder, and the website will display the most recent plot.
 
-![Polar Map](server/static/polar_map.png)
-![Cartesian Map](server/static/cartesian_map.png)
+![Polar Map](docs/polar_map.png)
+![Cartesian Map](docs/cartesian_map.png)
