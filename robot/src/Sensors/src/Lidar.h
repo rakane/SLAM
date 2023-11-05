@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 // RPLIDAR sdk
-#include "../../../include/rplidar.h"
+#include "../../../include/rplidar/rplidar.h"
 
 #include "../../Mapper/src/Mapper.h"
 

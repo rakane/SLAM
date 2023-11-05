@@ -12,6 +12,7 @@ This is a working experiment to create a basic SLAM robot using a RPLidar A1 and
   - [ ] Car motor controller
   - [ ] Battery and power management
   - [ ] Raspeberry Pi/Beaglebone connected to lidar and motor controller
+  - [ ] Bluetooth remote controller for car (posssibly ignore this for now)
 - [ ] Create basic SLAM algorithm
   - [ ] More research on SLAM algorithms
   - [ ] Create basic SLAM algorithm
@@ -22,11 +23,11 @@ This is a working experiment to create a basic SLAM robot using a RPLidar A1 and
 - RPLIDAR
 
   - [Slamtec RPLidar A1](https://www.slamtec.com/en/Lidar/A1/)
-  - [OpenGL LIDAR Display (great example RPLidar project)](https://github.com/jasonacox/OpenGL-LIDAR-Display)
+  - [OpenGL LIDAR Display (good example RPLidar project)](https://github.com/jasonacox/OpenGL-LIDAR-Display)
   - [RPLIDAR SDK](https://github.com/Slamtec/rplidar_sdk)
 
 - SLAM
-  - [Simulanious Localization and Mapping (Wikipedia)](https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping)
+  - [Simultaneous Localization and Mapping (Wikipedia)](https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping)
   - [SLAM for Dummies (PDF)](https://dspace.mit.edu/bitstream/handle/1721.1/119149/16-412j-spring-2005/contents/projects/1aslam_blas_repo.pdf)
   - [Simultaneous Localisation and Mapping (SLAM):
     Part I The Essential Algorithms (PDF)](https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/readings/Durrant-Whyte_Bailey_SLAM-tutorial-I.pdf)

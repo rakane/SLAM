@@ -5,7 +5,7 @@
 #include <thread>
 #include <unistd.h>
 
-#include "./include/rplidar.h" //RPLIDAR sdk
+#include "./include/rplidar/rplidar.h" //RPLIDAR sdk
 #include "./src/Mapper/src/Mapper.h"
 #include "./src/Sensors/src/Lidar.h"
 

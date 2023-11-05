@@ -2,9 +2,9 @@ CC = g++
 
 CFLAGS = -Wall -g -std=c++20
 
-INCLUDES = -I./include -I./include/hal -I./src/Sensors/src/Lidar.h -I./src/Mapper/src/Map.h -I./src/Mapper/src/Mapper.h
+INCLUDES = -I./include/rplidar -I./include/rplidar/hal -I./src/Sensors/src/Lidar.h -I./src/Mapper/src/Map.h -I./src/Mapper/src/Mapper.h
 
-LFLAGS = ./lib/librplidar_sdk.a
+LFLAGS = ./lib/rplidar/librplidar_sdk.a
 
 # define any libraries and frameworks to link into executable:
 LIBS = -pthread 
@@ -26,5 +26,5 @@ $(MAIN): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm ./src/SLAM
+	rm ./SLAM
 	rm ./bin/SLAM

@@ -21,13 +21,13 @@ popd > /dev/null
 echo
 
 echo "Copying headers and library"
-mkdir -p include
-mkdir -p include/hal
-mkdir -p lib
-cp "rplidar_sdk-release-${RPLIDARSDK}/sdk/output/${OS}/Release/librplidar_sdk.a" lib
-cp rplidar_sdk-release-${RPLIDARSDK}/sdk/sdk/include/* include
-cp rplidar_sdk-release-${RPLIDARSDK}/sdk/sdk/src/hal/* include/hal
-cp "rplidar_sdk-release-${RPLIDARSDK}/LICENSE" lib
-cp "rplidar_sdk-release-${RPLIDARSDK}/LICENSE" include
+mkdir -p include/rplidar
+mkdir -p include/rplidar/hal
+mkdir -p lib/rplidar
+cp "rplidar_sdk-release-${RPLIDARSDK}/sdk/output/${OS}/Release/librplidar_sdk.a" lib/rplidar
+cp rplidar_sdk-release-${RPLIDARSDK}/sdk/sdk/include/* include/rplidar
+cp rplidar_sdk-release-${RPLIDARSDK}/sdk/sdk/src/hal/* include/rplidar/hal
+cp "rplidar_sdk-release-${RPLIDARSDK}/LICENSE" lib/rplidar
+cp "rplidar_sdk-release-${RPLIDARSDK}/LICENSE" include/rplidar
 echo
 
