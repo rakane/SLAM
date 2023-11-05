@@ -1,33 +1,32 @@
-#include "Map.h"
+#ifndef MAPPER_H
+#define MAPPER_H
 
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
+#include <map>
+#include <chrono>
 
-#ifndef MAPPER_H
-#define MAPPER_H
+#include "Map.h"
 
 namespace SLAM
 {
-    struct MeasurementNode {
-        float angle; // degrees
-        float distance; // millimeters
-    };
-
     const unsigned int MAX_MEASUREMENTS = 8192;
 
     class Mapper
     {
     public:
-        Mapper();
+        Mapper(bool enableMapUploading = true);
         ~Mapper();
         
         void reset();
         void processMeasurementData(MeasurementNode measurement[], unsigned int numMeasurements);
-
-        void getMapPoint(float angle, float& distance);
     private:
+        void uploadMapData(MeasurementNode measurement[], unsigned int numMeasurements) const;
+
         Map map_;
+
+        bool enableMapUploading_;
     };
 }
 

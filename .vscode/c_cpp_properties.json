@@ -1,0 +1,15 @@
+{
+  "env": {
+    "myDefaultIncludePath": ["${workspaceFolder}", "${workspaceFolder}/include"]
+  },
+  "configurations": [
+    {
+      "name": "Mac",
+      "intelliSenseMode": "clang-x64",
+      "includePath": ["${workspaceFolder}", "${workspaceFolder}/include"],
+      "macFrameworkPath": ["/System/Library/Frameworks"],
+      "cppStandard": "c++17"
+    }
+  ],
+  "version": 4
+}

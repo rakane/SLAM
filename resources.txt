@@ -1,2 +1,10 @@
 - https://github.com/jasonacox/OpenGL-LIDAR-Display/tree/main
 - https://www.slamtec.com/en/Lidar/A1/
+- https://github.com/Slamtec/rplidar_sdk
+
+
+- Materials
+  - Lidar (DONE)
+  - Battery for lidar and raspberry pi/Beaglebone
+  - Car chassis
+

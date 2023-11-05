@@ -2,14 +2,14 @@ CC = g++
 
 CFLAGS = -Wall -g -std=c++20
 
-INCLUDES = -I./include -I./include/hal -I./src/Sensors/Lidar.h -I./src/Mapper/Map.h -I./src/Mapper/Mapper.h
+INCLUDES = -I./include -I./include/hal -I./src/Sensors/src/Lidar.h -I./src/Mapper/src/Map.h -I./src/Mapper/src/Mapper.h
 
 LFLAGS = ./lib/librplidar_sdk.a
 
 # define any libraries and frameworks to link into executable:
 LIBS = -pthread 
 
-SRCS = SLAM.cpp ./src/Mapper/Map.cpp ./src/Mapper/Mapper.cpp ./src/Sensors/Lidar.cpp
+SRCS = SLAM.cpp ./src/Mapper/src/Map.cpp ./src/Mapper/src/Mapper.cpp ./src/Sensors/src/Lidar.cpp
 
 OBJS = $(SRCS:.c=.o)
 
@@ -23,8 +23,8 @@ $(MAIN): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
 
 .c.o:
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm ./SLAM
-	rm ../bin/SLAM
+	rm ./src/SLAM
+	rm ./bin/SLAM

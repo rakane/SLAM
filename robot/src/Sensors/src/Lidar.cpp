@@ -131,12 +131,11 @@ bool SLAM::Lidar::checkRPLIDARHealth()
     // the macro IS_OK is the preperred way to judge whether the operation is succeed.
     if (IS_OK(opResult_)) 
     { 
-        printf("RPLidar health status : %d\n", healthinfo.status);
+        std::cout << "RPLidar health status : " << healthinfo.status << std::endl;
         if (healthinfo.status == RPLIDAR_STATUS_ERROR) 
         {
-            fprintf(stderr, "Error, rplidar internal error detected. Please reboot the device to retry.\n");
-            // enable the following code if you want rplidar to be reboot by software
-            // drv->reset();
+            std::cout << "Error, rplidar internal error detected. Please reboot the device to retry." << std::endl;
+
             return false;
         } else 
         {
@@ -146,7 +145,7 @@ bool SLAM::Lidar::checkRPLIDARHealth()
     } 
     else 
     {
-        fprintf(stderr, "Error, cannot retrieve the lidar health code: %x\n", opResult_);
+        std::cout << "Error, cannot retrieve the lidar health code: " << std::hex << opResult_ << std::endl;
         return false;
     }
 }

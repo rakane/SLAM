@@ -4,16 +4,16 @@ body {
   padding: 0;
 }
 
-#image {
-  height: 100vh;
-  width: 100vw;
+.image {
+  height: 50vh;
+  width: auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
-#image img {
-  height: 80%;
+.image img {
+  height: 100%;
   width: auto;
 }

@@ -5,9 +5,9 @@
 #include <thread>
 #include <unistd.h>
 
-#include "include/rplidar.h" //RPLIDAR sdk
-#include "./src/Mapper/Mapper.h"
-#include "./src/Sensors/Lidar.h"
+#include "./include/rplidar.h" //RPLIDAR sdk
+#include "./src/Mapper/src/Mapper.h"
+#include "./src/Sensors/src/Lidar.h"
 
 // Function to flag ctrl-c
 bool ctrl_c_pressed;
@@ -22,6 +22,15 @@ using namespace rp::standalone::rplidar;
 
 int main()
 {
+    std::cout << "SLAM Experiment Configuration: " << std::endl;
+    std::cout << "ANGLE_RESOLUTION: " << SLAM::ANGLE_RESOLUTION << std::endl;
+    std::cout << "MAX_X_SIZE (mm): " << SLAM::MAX_X_SIZE << std::endl;
+    std::cout << "MAX_Y_SIZE (mm): " << SLAM::MAX_Y_SIZE << std::endl;
+    std::cout << "CARTESTIAN_MAP_RESOLUTION: " << SLAM::CARTESTIAN_MAP_RESOLUTION << std::endl; 
+    std::cout << "MAX_MAP_POINTS: " << SLAM::MAX_MAP_POINTS << std::endl;
+    std::cout << "NUM_POLAR_ANGLES: " << SLAM::NUM_POLAR_ANGLES << std::endl;
+    std::cout << "MAX_POLAR_DISTANCE: " << SLAM::MAX_POLAR_DISTANCE << std::endl;
+
     // Trap Ctrl-C
     signal(SIGINT, ctrlc);
 
@@ -33,7 +42,7 @@ int main()
 
     if(!success)
     {
-        printf("LIDAR setup failed\n");
+        std::cout << "LIDAR setup failed" << std::endl;
         return 1;
     }
 

@@ -6,9 +6,9 @@
 #include <stdio.h>
 
 // RPLIDAR sdk
-#include "../../include/rplidar.h"
+#include "../../../include/rplidar.h"
 
-#include "../Mapper/Mapper.h"
+#include "../../Mapper/src/Mapper.h"
 
 #ifndef _countof
 #define _countof(_Array) (int)(sizeof(_Array) / sizeof(_Array[0]))
