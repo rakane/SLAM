@@ -15,8 +15,16 @@ echo
 echo "Building Slamtec RPLIDAR SDK library for ${OS}"
 pushd . > /dev/null
 cd rplidar_sdk-release-${RPLIDARSDK}/sdk
+
+echo
+echo "Overwriting RPLIDAR mak_def.inc with stashed copy to add -Wno-narrowing compiler flag"
+echo "This was needed to pass build in gcc 8.X on Debian 11"
+echo
+
+cp -f ../../rplidar-patch/mak_def.inc .
+
 make clean >& /dev/null
-make >& /dev/null
+make
 popd > /dev/null
 echo
 
