@@ -5,8 +5,8 @@
 
 SLAM::Motor::Motor(MotorLabel motorLabel, BBIO::PWMLabel pwmLabel):
   motorLabel_(motorLabel),
-  speed_(SLAM::MotorSpeed::OFF), 
   direction_(SLAM::MotorDirection::FORWARD),
+  speed_(SLAM::MotorSpeed::OFF), 
   pwm_(pwmLabel)
 {
     std::cout << "Motor::Motor()" << std::endl;

@@ -37,6 +37,7 @@ bool BBIO::PWM::configure()
     if (!exportFile.good())
     {
         std::cout << "PWM::configure() - " << pwmChipFilePath_ + "export" << " does not exist" << std::endl;
+        exportFile.close();   
         return false;
     }
 
@@ -53,6 +54,7 @@ bool BBIO::PWM::configure()
     if (!pwmPinFile.good())
     {
         std::cout << "PWM::configure() - " << pwmPinFilePath_ << " does not exist" << std::endl;
+        pwmPinFile.close();
         return false;
     }
     pwmPinFile.close();
@@ -61,6 +63,8 @@ bool BBIO::PWM::configure()
     setEnabled(false);
     setDutyCycle(0);
     setPeriod(0);
+
+    return true;
 }
 
 bool BBIO::PWM::setDutyCycle(unsigned int dutyCycleInNs)

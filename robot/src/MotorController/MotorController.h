@@ -1,10 +1,10 @@
 #ifndef MOTOR_CONTROLLER_H
 #define MOTOR_CONTROLLER_H
 
-#include "Motor.h"
-
 namespace SLAM
 {
+    class Motor;
+
     class MotorController
     {
     public:
@@ -12,10 +12,10 @@ namespace SLAM
         ~MotorController();
 
     private:
-        SLAM::Motor frontLeftMotor_;
-        SLAM::Motor frontRightMotor_;
-        SLAM::Motor backLeftMotor_;
-        SLAM::Motor backRightMotor_;
+        SLAM::Motor* frontLeftMotor_;
+        SLAM::Motor* frontRightMotor_;
+        SLAM::Motor* backLeftMotor_;
+        SLAM::Motor* backRightMotor_;
     };
 }
 

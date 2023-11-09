@@ -39,40 +39,6 @@ namespace BBIO
         PWM5 = 5,
         MAX_NUM_PWM_PINS = 6
     };
-
-    // Pin used for config-pin call
-    std::string PWMPin[MAX_NUM_PWM_PINS] = 
-    {
-        "p9.14",
-        "p9.16",
-        "p9.22",
-        "p9.21",
-        "p8.19",
-        "p8.13"
-    };
-
-    // PWM chip directory
-    std::string PWMChip[MAX_NUM_PWM_PINS] =
-    {
-        "pwmchip5",
-        "pwmchip5",
-        "pwmchip3",
-        "pwmchip3",
-        "pwmchip7",
-        "pwmchip7"
-    };
-
-    // PWM number inside PWM chip directory
-    std::string PWMNumber[MAX_NUM_PWM_PINS] =
-    {
-        "0",
-        "1",
-        "0",
-        "1",
-        "0",
-        "1"
-    };
-
     class PWM
     {
     public:
@@ -88,6 +54,39 @@ namespace BBIO
         bool setEnabled(bool enable);
 
     private:
+        // Pin used for config-pin call
+        std::string PWMPin[MAX_NUM_PWM_PINS] = 
+        {
+            "p9.14",
+            "p9.16",
+            "p9.22",
+            "p9.21",
+            "p8.19",
+            "p8.13"
+        };
+
+        // PWM chip directory
+        std::string PWMChip[MAX_NUM_PWM_PINS] =
+        {
+            "pwmchip5",
+            "pwmchip5",
+            "pwmchip3",
+            "pwmchip3",
+            "pwmchip7",
+            "pwmchip7"
+        };
+
+        // PWM number inside PWM chip directory
+        std::string PWMNumber[MAX_NUM_PWM_PINS] =
+        {
+            "0",
+            "1",
+            "0",
+            "1",
+            "0",
+            "1"
+        };
+
 
         // PWM configuration
         PWMLabel pwmLabel_;
@@ -100,7 +99,7 @@ namespace BBIO
         unsigned int dutyCycleInNs_;
         unsigned int periodInNs_;
         bool enabled_;
-    }
+    };
 };
 
 #endif // PWM_H
