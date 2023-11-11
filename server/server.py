@@ -14,17 +14,16 @@ app = Flask(__name__)
 
 # Create socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-s.connect(("127.0.0.1", 8081))
+s.connect(("192.168.1.30", 8081))
 
 @app.route("/command", methods=['POST'])
 def send_command():
     data = json.loads(request.data)
-    command = data['command']
+    command = data['command'] + "\n"
 
-    # Send command to robot
-    print("Sending command: " + command)
-    sent = s.send(command.encode())
-    print("Sent " + str(sent) + " bytes")
+    # Send binary 'c' to indicate command
+    s.send(command.encode())
+    print("Sent " + command)
 
     return json.dumps({'status': 1})
 
