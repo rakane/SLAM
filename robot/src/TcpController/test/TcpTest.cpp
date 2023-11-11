@@ -3,6 +3,7 @@
 #include <arpa/inet.h> // inet_addr()
 #include <netdb.h>
 #include <stdio.h>
+#include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h> // bzero()
@@ -14,7 +15,6 @@
 
 #define TCP_PORT 8081
 #define BUFFER_SIZE 1024
-#define LOCAL_TEST false
 
 // Function to flag ctrl-c
 bool ctrl_c_pressed;
@@ -36,8 +36,10 @@ int main()
     // Trap Ctrl-C
     signal(SIGINT, ctrlc);
 
-    if(LOCAL_TEST)
+    if(false)
     {
+        usleep(3000000);
+
         // Setup client
         bool okToContinue = true;
         int sockfd;

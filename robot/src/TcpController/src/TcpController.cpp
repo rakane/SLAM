@@ -1,6 +1,7 @@
 #include <iostream>
 #include <netdb.h> 
-#include <netinet/in.h> 
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <stdlib.h> 
 #include <string.h> 
@@ -44,11 +45,23 @@ void TcpController::run()
     {
         printf("Controller socket successfully created..\n"); 
     }
+
+    /*
+    int yes = 1;
+    int result = setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char*) &yes, sizeof(int));
+
+    if(result < 0)
+    {
+        printf("Failed to set controller socket opts!\n");
+        return;
+    }
+    */
+
     bzero(&servaddr, sizeof(servaddr)); 
    
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(TCP_PORT); 
    
     // Binding newly created socket to given IP and verification 
@@ -63,7 +76,7 @@ void TcpController::run()
     }
    
     // Now server is ready to listen and verification 
-    if ((listen(sockfd, 5)) != 0) 
+    if ((listen(sockfd, 0)) != 0) 
     { 
         printf("Controller listen failed...\n"); 
         return;
@@ -102,6 +115,9 @@ void TcpController::run()
 
         if(bytesRead > 0)
         {
+            // Ensure that buffer is null terminated
+            buffer[BUFFER_SIZE - 1] = '\0';
+    
             // print buffer which contains the client contents 
             printf("Command received: %s \n", buffer); 
 

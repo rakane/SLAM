@@ -7,7 +7,7 @@ INCLUDES = -I./include/rplidar -I./include/rplidar/hal -I./src/Sensors/src -I./s
 LFLAGS = ./lib/rplidar/librplidar_sdk.a
 
 # define any libraries and frameworks to link into executable:
-LIBS = -pthread -lbluetooth
+LIBS = -pthread
 
 SRCS = SLAM.cpp ./src/Mapper/src/Map.cpp ./src/Mapper/src/Mapper.cpp ./src/Sensors/src/Lidar.cpp ./src/BBIO/PWM.cpp ./src/BBIO/GPIO.cpp ./src/MotorController/MotorControllerInterface.h ./src/MotorController/Motor.cpp ./src/MotorController/MotorController.cpp
 
