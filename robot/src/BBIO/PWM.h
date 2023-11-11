@@ -19,11 +19,11 @@
 ///////////////////////////////////////////
 // Pin Setup (system calls):
 //
-// config-pin <pin> pwm
-// echo 0 > /sys/class/pwm/pwmchip0/export
-// echo 1000000 > /sys/class/pwm/pwmchip0/pwm0/period (nanoseconds)
-// echo 500000 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle (nanoseconds)
-// echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
+// config-pin p9.14 pwm
+// echo 0 > /sys/class/pwm/pwmchip5/export
+// echo 1000000 > /sys/class/pwm/pwmchip5/pwm0/period (nanoseconds)
+// echo 500000 > /sys/class/pwm/pwmchip5/pwm0/duty_cycle (nanoseconds)
+// echo 1 > /sys/class/pwm/pwmchip5/pwm0/enable
 ///////////////////////////////////////////
 
 namespace BBIO

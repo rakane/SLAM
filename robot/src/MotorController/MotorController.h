@@ -1,15 +1,19 @@
 #ifndef MOTOR_CONTROLLER_H
 #define MOTOR_CONTROLLER_H
 
+#include "./MotorControllerInterface.h"
+
 namespace SLAM
 {
     class Motor;
 
-    class MotorController
+    class MotorController: public MotorControllerInterface
     {
     public:
         MotorController();
         ~MotorController();
+
+        void processDirectionCommand(std::string command) override;
 
     private:
         SLAM::Motor* frontLeftMotor_;

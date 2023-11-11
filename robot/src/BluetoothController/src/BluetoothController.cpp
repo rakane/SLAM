@@ -6,11 +6,11 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
-#include "../MotorController/MotorController.h"
+#include "../../MotorController/MotorControllerInterface.h"
 #include "BluetoothController.h"
 
 
-BluetoothController::BluetoothController(SLAM::MotorController* motorController)
+BluetoothController::BluetoothController(SLAM::MotorControllerInterface* motorController)
     : stateMutex_(), state_(BluetoothState::IDLE), 
       bluetoothSocket_(-1), bluetoothClient_(-1), motorController_(motorController)
 {
@@ -31,31 +31,56 @@ void BluetoothController::run()
     // Bluetooth setup
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
     char buf[1024] = { 0 };
-    int s, client, bytes_read;
     socklen_t opt = sizeof(rem_addr);
 
     // allocate socket
-    s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+    int s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+
+    if(s < 0)
+    {
+        std::cout << "Bluetooth socket allocation failed! Terminating bluetooth server..." << std::endl;
+        return;
+    }
 
     // bind socket to port 1 of the first available 
     // local bluetooth adapter
     loc_addr.rc_family = AF_BLUETOOTH;
-    //loc_addr.rc_bdaddr = *BDADDR_ANY;
+    loc_addr.rc_bdaddr = *BDADDR_ANY;
     loc_addr.rc_channel = (uint8_t) 1;
-    bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
+    int result = bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
+
+    if(result < 0)
+    {
+        std::cout << "Bluetooth socket bind failed! Terminating bluetooth server..." << std::endl;
+        return;
+    }
 
     // put socket into listening mode
-    listen(s, 1);
+    result = listen(s, 1);
 	
-    // accept one connection
-    client = accept(s, (struct sockaddr *)&rem_addr, &opt);
+    if(result < 0)
+    {
+        std::cout << "Bluetooth socket listen failed! Terminating bluetooth server..." << std::endl;
+        return;
+    }
 
+    // accept one connection
+    int client = accept(s, (struct sockaddr *)&rem_addr, &opt);
+
+    if(client < 0)
+    {
+        std::cout << "Bluetooth socket accept failed! Terminating bluetooth server..." << std::endl;
+        return;
+    }
+
+    // Get connection info
     ba2str( &rem_addr.rc_bdaddr, buf );
     fprintf(stderr, "accepted connection from %s\n", buf);
     memset(buf, 0, sizeof(buf));
 
     localState = BluetoothState::RUNNING;
 
+    int bytes_read = 0;
     while(localState != BluetoothState::TERMINATED)
     {
         bytes_read = read(client, buf, sizeof(buf));
@@ -69,8 +94,8 @@ void BluetoothController::run()
             
         }        
 
-        // sleep for 1 second
-        usleep(1000000);
+        // sleep for 0.5 seconds
+        usleep(500000);
 
         // Update state
         {

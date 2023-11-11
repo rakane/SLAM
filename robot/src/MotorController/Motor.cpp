@@ -5,8 +5,7 @@
 
 SLAM::Motor::Motor(MotorLabel motorLabel, BBIO::PWMLabel pwmLabel):
   motorLabel_(motorLabel),
-  direction_(SLAM::MotorDirection::FORWARD),
-  speed_(SLAM::MotorSpeed::OFF), 
+  direction_(SLAM::MotorDirection::OFF),
   pwm_(pwmLabel)
 {
     std::cout << "Motor::Motor()" << std::endl;
@@ -25,28 +24,10 @@ SLAM::Motor::~Motor()
     std::cout << "Motor::~Motor()" << std::endl;
 }
 
-void SLAM::Motor::setSpeed(MotorSpeed speed)
-{
-    speed_ = speed;
-    updatePwmPin();
-}
-
 void SLAM::Motor::setDirection(MotorDirection direction)
 {
     direction_ = direction;
     updatePwmPin();
-}
-
-void SLAM::Motor::setSpeedAndDirection(MotorSpeed speed, MotorDirection direction)
-{
-    speed_ = speed;
-    direction_ = direction;
-    updatePwmPin();
-}
-
-SLAM::MotorSpeed SLAM::Motor::getSpeed()
-{
-    return speed_;
 }
 
 SLAM::MotorDirection SLAM::Motor::getDirection()

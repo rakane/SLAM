@@ -15,14 +15,9 @@ namespace SLAM
 
     enum MotorDirection
     {
-        FORWARD = 0,
-        BACKWARD = 1
-    };
-
-    enum MotorSpeed
-    {
         OFF = 0,
-        ON = 1
+        FORWARD = 1,
+        BACKWARD = 2,
     };
 
     class Motor
@@ -31,11 +26,7 @@ namespace SLAM
         Motor( MotorLabel motorLabel, BBIO::PWMLabel pwmLabel);
         ~Motor();
 
-        void setSpeed(MotorSpeed speed);
         void setDirection(MotorDirection direction);
-        void setSpeedAndDirection(MotorSpeed speed, MotorDirection direction);
-
-        MotorSpeed getSpeed();
         MotorDirection getDirection(); 
 
     private:
@@ -43,7 +34,6 @@ namespace SLAM
 
         MotorLabel motorLabel_;
         MotorDirection direction_;
-        MotorSpeed speed_;
 
         BBIO::PWM pwm_;
     };

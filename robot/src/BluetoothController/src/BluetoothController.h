@@ -5,13 +5,13 @@
 
 namespace SLAM
 {
-    class MotorController;
+    class MotorControllerInterface
 }
 
 class BluetoothController
 {
 public:
-    BluetoothController(SLAM::MotorController* motorController);
+    BluetoothController(SLAM::MotorControllerInterface* motorController);
     ~BluetoothController();
 
     void run();
@@ -35,7 +35,7 @@ private:
     int bluetoothClient_;
 
     // Motor controller
-    SLAM::MotorController* motorController_;
+    SLAM::MotorControllerInterface* motorController_;
 };
 
 #endif
