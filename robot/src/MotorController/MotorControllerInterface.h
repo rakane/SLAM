@@ -5,13 +5,22 @@
 
 namespace SLAM
 {
+    enum class Direction
+    {
+        FORWARD = 0,
+        BACKWARD,
+        LEFT,
+        RIGHT,
+        STOP
+    };
+
     class MotorControllerInterface
     {
     public:
         MotorControllerInterface() = default;
         virtual ~MotorControllerInterface() = default;
 
-        virtual void processDirectionCommand(std::string command) = 0;
+        virtual void processDirectionCommand(Direction direction) = 0;
     };
 }
 

@@ -47,16 +47,16 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-window.setInterval(function () {
-  if (!isVisible) {
-    return;
-  }
+// window.setInterval(function () {
+//   if (!isVisible) {
+//     return;
+//   }
 
-  if (LOAD_DIRECT) {
-    loadPolarImage();
-    loadCartesianImage();
-  } else {
-    $("#polar").html('<img src="/image/polar/direct" />');
-    $("#cartesian").html('<img src="/image/cartesian/direct" />');
-  }
-}, 250);
+//   if (LOAD_DIRECT) {
+//     loadPolarImage();
+//     loadCartesianImage();
+//   } else {
+//     $("#polar").html('<img src="/image/polar/direct" />');
+//     $("#cartesian").html('<img src="/image/cartesian/direct" />');
+//   }
+// }, 250);

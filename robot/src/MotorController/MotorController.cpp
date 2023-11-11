@@ -26,7 +26,7 @@ SLAM::MotorController::~MotorController()
     delete backRightMotor_;
 }
 
-void SLAM::MotorController::processDirectionCommand(std::string command)
+void SLAM::MotorController::processDirectionCommand(Direction direction)
 {
-    std::cout << "MotorController::processDirectionCommand(): " << command << std::endl;
+    std::cout << "MotorController::processDirectionCommand(): " << static_cast<int>(direction) << std::endl;
 }

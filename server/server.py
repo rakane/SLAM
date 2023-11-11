@@ -6,10 +6,27 @@ import json
 import os
 import base64
 import time
+import socket
 
 matplotlib.use('agg')
 
 app = Flask(__name__)
+
+# Create socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+s.connect(("127.0.0.1", 8081))
+
+@app.route("/command", methods=['POST'])
+def send_command():
+    data = json.loads(request.data)
+    command = data['command']
+
+    # Send command to robot
+    print("Sending command: " + command)
+    sent = s.send(command.encode())
+    print("Sent " + str(sent) + " bytes")
+
+    return json.dumps({'status': 1})
 
 @app.route("/upload", methods=['POST'])
 def upload_map():

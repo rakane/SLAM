@@ -11,6 +11,14 @@
   <body>
     <div id="polar" class="image"></div>
     <div id="cartesian" class="image"></div>
+    <div id="buttons">
+      <button id="forward">Forward</button>
+      <button id="backward">Backward</button>
+      <button id="left">Left</button>
+      <button id="right">Right</button>
+      <button id="stop">Stop</button>
+      <button id="exit">Exit</button>
+    </div>
   </body>
 
   <script
@@ -19,4 +27,5 @@
     crossorigin="anonymous"
   ></script>
   <script src="{{url_for('static', filename='loadimage.js')}}"></script>
+  <script src="{{url_for('static', filename='commands.js')}}"></script>
 </html>

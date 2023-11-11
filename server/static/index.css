@@ -17,3 +17,18 @@ body {
   height: 100%;
   width: auto;
 }
+
+#buttons {
+  margin: 32px 0 32px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#buttons button {
+  margin: 0 10px;
+  width: 96px;
+  height: 64px;
+  cursor: pointer;
+}

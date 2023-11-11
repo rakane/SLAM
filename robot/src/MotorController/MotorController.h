@@ -13,7 +13,7 @@ namespace SLAM
         MotorController();
         ~MotorController();
 
-        void processDirectionCommand(std::string command) override;
+        void processDirectionCommand(Direction direction) override;
 
     private:
         SLAM::Motor* frontLeftMotor_;
