@@ -9,7 +9,6 @@
 #include "./src/Mapper/src/Mapper.h"
 #include "./src/Sensors/src/Lidar.h"
 #include "./src/MotorController/MotorController.h"
-#include "./src/BluetoothController/src/BluetoothController.h"
 
 // Function to flag ctrl-c
 bool ctrl_c_pressed;
@@ -39,7 +38,6 @@ int main()
     SLAM::Mapper* mapper = new SLAM::Mapper();
     SLAM::Lidar* lidar = new SLAM::Lidar(PORT, mapper);
     SLAM::MotorController* motorController = new SLAM::MotorController();
-    BluetoothController* bluetoothController = new BluetoothController(motorController);
 
     // Start LIDAR
     bool success = lidar->setup();
@@ -52,7 +50,6 @@ int main()
 
     // Run threads
     std::thread lidarThread(&SLAM::Lidar::run, lidar);
-    std::thread bluetoothThread(&BluetoothController::run, bluetoothController);
 
     // Wait for Ctrl-C
     while (!ctrl_c_pressed)
@@ -67,12 +64,8 @@ int main()
     lidar->shutdown();
     lidarThread.join();
 
-    // Shutdown Bluetooth
-    bluetoothController->terminate();
-
     delete mapper;
     delete lidar;
-    delete bluetoothController;
     delete motorController;
 
     return 0;

@@ -2,6 +2,7 @@
 #define MOTOR_H
 
 #include "../BBIO/PWM.h"
+#include "../BBIO/GPIO.h"
 
 namespace SLAM
 {
