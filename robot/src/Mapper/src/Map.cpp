@@ -1,3 +1,6 @@
+#include <vector>
+
+
 #include "Map.h"
 
 SLAM::Map::Map(): polarMap_(), cartesianMap_()
@@ -9,7 +12,9 @@ SLAM::Map::Map(): polarMap_(), cartesianMap_()
     for (double i = 0; i < NUM_POLAR_ANGLES; i++)
     {
         double angle = i * ANGLE_RESOLUTION;
-        polarMap_.insert(std::make_pair(angle, MAX_POLAR_DISTANCE));
+
+        std::pair<double, double> polarPair = std::make_pair(angle, MAX_POLAR_DISTANCE);
+        polarMap_.insert(polarPair);
     }
 
     // Cartesian map, set all points to false
@@ -18,7 +23,8 @@ SLAM::Map::Map(): polarMap_(), cartesianMap_()
         for (int y = -MAX_Y_SIZE; y < MAX_Y_SIZE; y += CARTESTIAN_MAP_RESOLUTION)
         {
             CartesianPoint point = std::make_pair(x, y);
-            cartesianMap_.insert(std::make_pair(point, false));
+            std::pair<CartesianPoint, bool> cartesianPair = std::make_pair(point, false);
+            cartesianMap_.insert(cartesianPair);
         }
     }
 }

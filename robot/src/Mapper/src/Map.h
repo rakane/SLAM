@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <stdio.h>
 #include <map>
-
+#include <cmath>
 
 namespace SLAM
 {

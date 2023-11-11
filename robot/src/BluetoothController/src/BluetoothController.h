@@ -1,6 +1,7 @@
 #ifndef BLUETOOTH_CONTROLLER_H
 #define BLUETOOTH_CONTROLLER_H
 
+#include <mutex>
 
 namespace SLAM
 {

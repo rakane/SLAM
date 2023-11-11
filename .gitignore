@@ -8,7 +8,7 @@ server/static/cartesian_map.png
 
 # Binary files
 robot/bin/SLAM
-robot/src/SLAM
+robot/SLAM
 
 # RP Lidar Dependencies
 robot/rplidar_sdk-release-v1.12.0/

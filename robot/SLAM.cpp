@@ -9,7 +9,7 @@
 #include "./src/Mapper/src/Mapper.h"
 #include "./src/Sensors/src/Lidar.h"
 #include "./src/MotorController/MotorController.h"
-#include "./src/BluetoothController/BluetoothController.h"
+#include "./src/BluetoothController/src/BluetoothController.h"
 
 // Function to flag ctrl-c
 bool ctrl_c_pressed;
