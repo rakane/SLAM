@@ -3,7 +3,10 @@
 
 #include <mutex>
 
-#include "../../MotorController/MotorControllerInterface.h"
+namespace SLAM
+{
+    class MotorControllerInterface;
+}
 
 class TcpController
 {

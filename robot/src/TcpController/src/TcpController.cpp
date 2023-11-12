@@ -9,7 +9,7 @@
 #include <sys/types.h> 
 #include <unistd.h>
 
-#include "../../MotorController/MotorControllerInterface.h"
+#include "../../MotorController/src/MotorControllerInterface.h"
 #include "TcpController.h"
 
 #define TCP_PORT 8081

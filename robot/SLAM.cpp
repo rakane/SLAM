@@ -8,7 +8,8 @@
 #include "./include/rplidar/rplidar.h" //RPLIDAR sdk
 #include "./src/Mapper/src/Mapper.h"
 #include "./src/Sensors/src/Lidar.h"
-#include "./src/MotorController/MotorController.h"
+#include "./src/MotorController/src/MotorController.h"
+#include "./src/TcpController/src/TcpController.h"
 
 // Function to flag ctrl-c
 bool ctrl_c_pressed;
@@ -37,7 +38,8 @@ int main()
 
     SLAM::Mapper* mapper = new SLAM::Mapper();
     SLAM::Lidar* lidar = new SLAM::Lidar(PORT, mapper);
-    SLAM::MotorController* motorController = new SLAM::MotorController();
+    SLAM::MotorControllerInterface* motorController = new SLAM::MotorController();    
+    TcpController* tcpController = new TcpController(motorController);
 
     // Start LIDAR
     bool success = lidar->setup();
@@ -50,6 +52,7 @@ int main()
 
     // Run threads
     std::thread lidarThread(&SLAM::Lidar::run, lidar);
+    std::thread controllerThread(&TcpController::run, tcpController);
 
     // Wait for Ctrl-C
     while (!ctrl_c_pressed)
@@ -62,11 +65,16 @@ int main()
 
     // Stop LIDAR
     lidar->shutdown();
-    lidarThread.join();
+    lidarThread.join();    
+
+    // Stop TCP Controller
+    tcpController->terminate();
+    controllerThread.join();
 
     delete mapper;
     delete lidar;
     delete motorController;
+    delete tcpController;
 
     return 0;
 }

@@ -1,7 +1,6 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include "../BBIO/PWM.h"
 #include "../BBIO/GPIO.h"
 
 namespace SLAM
@@ -24,19 +23,20 @@ namespace SLAM
     class Motor
     {
     public:
-        Motor( MotorLabel motorLabel, BBIO::PWMLabel pwmLabel);
+        Motor(MotorLabel motorLabel, unsigned short gpioPin1, unsigned short gpioPin2);
         ~Motor();
 
         void setDirection(MotorDirection direction);
         MotorDirection getDirection(); 
 
     private:
-        void updatePwmPin();
+        void updateGpioPins();
 
         MotorLabel motorLabel_;
         MotorDirection direction_;
 
-        BBIO::PWM pwm_;
+        BBIO::GPIO gpio1_;
+        BBIO::GPIO gpio2_;
     };
 }
 
