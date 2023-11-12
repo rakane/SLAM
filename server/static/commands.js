@@ -17,6 +17,27 @@ function sendCommand(command) {
 }
 
 $(document).ready(function () {
+  body = document.getElementsByTagName("body")[0];
+  body.addEventListener("keydown", function (e) {
+    // WASD for movement
+    // Space for stop
+    // E for exit
+
+    if (e.keyCode == 87) {
+      sendCommand("F");
+    } else if (e.keyCode == 83) {
+      sendCommand("B");
+    } else if (e.keyCode == 65) {
+      sendCommand("L");
+    } else if (e.keyCode == 68) {
+      sendCommand("R");
+    } else if (e.keyCode == 32) {
+      sendCommand("S");
+    } else if (e.keyCode == 69) {
+      sendCommand("E");
+    }
+  });
+
   $("#forward").click(function () {
     sendCommand("F");
   });

@@ -2,6 +2,10 @@ html,
 body {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .image {
@@ -31,4 +35,14 @@ body {
   width: 96px;
   height: 64px;
   cursor: pointer;
+}
+
+#command {
+  appearance: none;
+  outline: none;
+  margin: 32px 0 32px 0;
+  width: 80%;
+  height: 100px;
+  background-color: lightgray;
+  border: 2px solid black;
 }
