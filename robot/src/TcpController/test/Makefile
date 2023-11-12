@@ -2,7 +2,7 @@ CC = g++
 
 CFLAGS = -Wall -g -std=c++20
 
-INCLUDES = -I../../MotorController -I.
+INCLUDES = -I../../MotorController/src -I.
 
 LFLAGS = 
 

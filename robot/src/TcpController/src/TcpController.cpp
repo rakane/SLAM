@@ -9,7 +9,6 @@
 #include <sys/types.h> 
 #include <unistd.h>
 
-#include "../../MotorController/src/MotorControllerInterface.h"
 #include "TcpController.h"
 
 #define TCP_PORT 8081
@@ -46,17 +45,6 @@ void TcpController::run()
         printf("Controller socket successfully created..\n"); 
     }
 
-    /*
-    int yes = 1;
-    int result = setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char*) &yes, sizeof(int));
-
-    if(result < 0)
-    {
-        printf("Failed to set controller socket opts!\n");
-        return;
-    }
-    */
-
     bzero(&servaddr, sizeof(servaddr)); 
    
     // assign IP, PORT 
@@ -76,7 +64,7 @@ void TcpController::run()
     }
    
     // Now server is ready to listen and verification 
-    if ((listen(sockfd, 0)) != 0) 
+    if ((listen(sockfd, 10)) != 0) 
     { 
         printf("Controller listen failed...\n"); 
         return;
@@ -87,86 +75,89 @@ void TcpController::run()
     }
 
     socklen_t len = sizeof(cli); 
-   
-    // Accept the data packet from client and verification 
-    connfd = accept(sockfd, (struct sockaddr*)&cli, &len); 
-    if (connfd < 0) 
-    { 
-        printf("Controller server accept failed...\n"); 
-        return;
-    } 
-    else
-    {
-        printf("Controller server accepted the client with address: %s and port: %d\n", inet_ntoa(cli.sin_addr), ntohs(cli.sin_port));
-    }
-
+    
     TcpControllerState localState = TcpControllerState::RUNNING;
-
     char buffer[BUFFER_SIZE];
+
     while(localState != TcpControllerState::TERMINATED)
     {
+        // Accept the data packet from client and verification 
+        connfd = accept(sockfd, (struct sockaddr*)&cli, &len); 
+        if (connfd < 0) 
+        { 
+            printf("Controller server accept failed...\n"); 
+            return;
+        } 
+        else
+        {
+            printf("Controller server accepted the client with address: %s and port: %d\n", 
+                inet_ntoa(cli.sin_addr), ntohs(cli.sin_port));
+        }
+
         // clear the buffer
         bzero(buffer, BUFFER_SIZE); 
 
-        std::cout << "Reading data from socket..." << std::endl;
-   
-        // read the message from client and copy it in buffer 
-        int bytesRead = read(connfd, buffer, sizeof(buffer)); 
-
-        if(bytesRead > 0)
+        bool clientDisconnected = false;
+        while(!clientDisconnected)
         {
-            // Ensure that buffer is null terminated
-            buffer[BUFFER_SIZE - 1] = '\0';
+            // read the message from client and copy it in buffer 
+            int bytesRead = read(connfd, buffer, sizeof(buffer)); 
+
+            if(bytesRead > 0)
+            {
+                // Ensure that buffer is null terminated
+                buffer[BUFFER_SIZE - 1] = '\0';
     
-            // print buffer which contains the client contents 
-            printf("Command received: %s \n", buffer); 
+                printf("Command received: %s \n", buffer); 
 
-            char command = buffer[0];
+                char command = buffer[0];
 
-            // Commands:
-            // F - Forward
-            // B - Backward
-            // L - Left
-            // R - Right
-            // S - Stop
-            // E - Exit
-            if(command == 'E')
-            {
-                std::cout << "Exit command received. Shutting down..." << std::endl;
+                // Commands:
+                // F - Forward
+                // B - Backward
+                // L - Left
+                // R - Right
+                // S - Stop
+                // E - Exit
+                if(command == 'E')
                 {
-                    std::lock_guard<std::mutex> lock(mutex_);
-                    state_ = TcpControllerState::TERMINATED;
+                    std::cout << "Exit command received. Shutting down..." << std::endl;
+                    
+                    // Set state to TERMINATED
+                    terminate(); 
+                    break;
                 }
-                break;
-            }
 
-            if(command == 'F' || command == 'B' || command == 'L' || command == 'R' || command == 'S')
-            {
-                SLAM::Direction direction = commandToMotorDirection(command);
-
-                motorController_->processDirectionCommand(direction);
-            } 
-            else 
-            {
-                printf("Unknown command: %c \n", command);
+                if(command == 'F' || command == 'B' || command == 'L' || command == 'R' || command == 'S')
+                {
+                    SLAM::Direction direction = commandToMotorDirection(command);
+                    motorController_->processDirectionCommand(direction);
+                } 
+                else 
+                {
+                    printf("Unknown command: %c \n", command);
+                }
             }
-            
+            else
+            {
+                std::cout << "No data received - client disconnected" << std::endl;
+                clientDisconnected = true;
+            }
         }
-        else
-        {
-            std::cout << "No data received. " << std::endl;
-        }
+
+        std::cout << "Closing client connection..." << std::endl;
+        close(connfd);
 
         // Update state
         {
             std::lock_guard<std::mutex> lock(mutex_);
             localState = state_;
-        }
+        }    
     }
 
     std::cout << "TcpController::run() - Closing socket" << std::endl;
    
-    // After chatting close the socket 
+    // Close the socket 
     close(sockfd); 
 }
 

@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include "../../MotorController/MotorControllerInterface.h"
+#include "../../MotorController/src/MotorControllerInterface.h"
 
 class TestMotorController : public SLAM::MotorControllerInterface
 {
