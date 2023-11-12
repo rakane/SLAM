@@ -12,20 +12,35 @@ matplotlib.use('agg')
 
 app = Flask(__name__)
 
-# Create socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-s.connect(("192.168.1.30", 8081))
-
 @app.route("/command", methods=['POST'])
 def send_command():
     data = json.loads(request.data)
     command = data['command'] + "\n"
 
-    # Send binary 'c' to indicate command
-    s.send(command.encode())
-    print("Sent " + command)
+    # Create socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    except:
+        print("Failed to create socket")
+        return json.dumps({'status': 0})
 
-    return json.dumps({'status': 1})
+    # Connect to socket
+    try:
+       s.connect(("192.168.1.30", 8081))
+    except:
+        print("Failed to connect to socket")
+        return json.dumps({'status': 0})
+    
+    # Send command
+    status = 0
+    
+    sent = s.send(command.encode())
+    if sent == len(command):
+        status = 1
+
+    s.close()
+
+    return json.dumps({'status': status})
 
 @app.route("/upload", methods=['POST'])
 def upload_map():
