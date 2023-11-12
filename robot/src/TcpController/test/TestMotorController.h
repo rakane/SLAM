@@ -18,7 +18,8 @@ public:
 
     void processDirectionCommand(SLAM::Direction direction)
     {
-        std::cout << "TestMotorController::processDirectionCommand(" << static_cast<int>(direction) << ")" << std::endl;
+        std::cout << "TestMotorController::processDirectionCommand(" 
+            << static_cast<int>(direction) << ")" << std::endl;
     }
 
 };

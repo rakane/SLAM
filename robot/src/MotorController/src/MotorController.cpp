@@ -34,7 +34,7 @@ SLAM::MotorController::~MotorController()
 
 void SLAM::MotorController::processDirectionCommand(Direction direction)
 {
-    std::cout << "MotorController::processDirectionCommand(): " << static_cast<int>(direction) << std::endl;
+    // std::cout << "MotorController::processDirectionCommand(): " << static_cast<int>(direction) << std::endl;
 
     // Command mapping:
     //

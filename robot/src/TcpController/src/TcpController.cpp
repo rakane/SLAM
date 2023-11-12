@@ -90,8 +90,8 @@ void TcpController::run()
         } 
         else
         {
-            printf("Controller server accepted the client with address: %s and port: %d\n", 
-                inet_ntoa(cli.sin_addr), ntohs(cli.sin_port));
+            //printf("Controller server accepted the client with address: %s and port: %d\n", 
+            //    inet_ntoa(cli.sin_addr), ntohs(cli.sin_port));
         }
 
         // clear the buffer
@@ -108,7 +108,7 @@ void TcpController::run()
                 // Ensure that buffer is null terminated
                 buffer[BUFFER_SIZE - 1] = '\0';
     
-                printf("Command received: %s \n", buffer); 
+                printf("TCP Controller received command: %s", buffer); 
 
                 char command = buffer[0];
 
@@ -140,12 +140,12 @@ void TcpController::run()
             }
             else
             {
-                std::cout << "No data received - client disconnected" << std::endl;
+                // std::cout << "No data received - client disconnected" << std::endl;
                 clientDisconnected = true;
             }
         }
 
-        std::cout << "Closing client connection..." << std::endl;
+        // std::cout << "Closing client connection..." << std::endl;
         close(connfd);
 
         // Update state
