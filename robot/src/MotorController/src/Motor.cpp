@@ -53,7 +53,7 @@ void SLAM::Motor::updateGpioPins()
     {
         pin2Value = BBIO::GpioValue::HIGH;
     }
-    
+     
     gpio1_.setValue(pin1Value);
     gpio2_.setValue(pin2Value);
 }

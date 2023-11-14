@@ -10,9 +10,9 @@ SLAM::MotorController::MotorController()
     std::cout << "MotorController::MotorController()" << std::endl;
 
     frontLeftMotor_ = new SLAM::Motor(SLAM::MotorLabel::FRONT_LEFT, 75, 77);
-    frontRightMotor_ = new SLAM::Motor(SLAM::MotorLabel::FRONT_RIGHT, 79, 80);
+    frontRightMotor_ = new SLAM::Motor(SLAM::MotorLabel::FRONT_RIGHT, 80, 79);
     backLeftMotor_ = new SLAM::Motor(SLAM::MotorLabel::BACK_LEFT, 73, 71);
-    backRightMotor_ = new SLAM::Motor(SLAM::MotorLabel::BACK_RIGHT, 68, 67);
+    backRightMotor_ = new SLAM::Motor(SLAM::MotorLabel::BACK_RIGHT, 67, 68);
 }
 
 SLAM::MotorController::~MotorController()
