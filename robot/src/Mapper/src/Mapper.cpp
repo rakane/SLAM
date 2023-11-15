@@ -4,6 +4,8 @@
 #include <sstream>
 #include <string>
 
+#define SERVER_URL "192.168.1.172"
+
 SLAM::Mapper::Mapper(double uploadInterval, bool enableMapUploading)
     : map_(), enableMapUploading_(enableMapUploading),
       throttleUploads_(uploadInterval > 0.0), uploadInterval_(uploadInterval),
@@ -22,6 +24,8 @@ void SLAM::Mapper::reset()
 
 void SLAM::Mapper::processMeasurementData(MeasurementNode measurement[], unsigned int numMeasurements)
 {
+    std::cout << "Processing measurement data" << std::endl;
+
     // Update map
     for(unsigned int measIdx = 0; measIdx < numMeasurements; measIdx++)
     {
@@ -86,7 +90,7 @@ void SLAM::Mapper::uploadMapData(MeasurementNode measurement[], unsigned int num
     ySStream << "0";
 
     std::stringstream ss;
-    ss << "curl -X POST http://localhost:8080/upload -H \"Content-Type: application/json\"";
+    ss << "curl -X POST " << SERVER_URL << ":8080/upload -H \"Content-Type: application/json\"";
     ss << " -d '{\"angle\": [" << angleSStream.str() << "],";
     ss << " \"distance\": [" << distanceSStream.str() << "],";
     ss << " \"x\": [" << xSStream.str() << "],";

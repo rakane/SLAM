@@ -18,7 +18,9 @@ void ctrlc(int)
     ctrl_c_pressed = true;
 }
 
-#define PORT "/dev/tty.SLAB_USBtoUART"   // macOS UART for RPLIDAR
+// #define PORT "/dev/tty.SLAB_USBtoUART"   // macOS UART for RPLIDAR
+#define PORT "/dev/ttyUSB0"
+#define RUN_TCP_CONTROLLER false
 
 using namespace rp::standalone::rplidar;
 
@@ -39,7 +41,7 @@ int main()
     SLAM::Mapper* mapper = new SLAM::Mapper();
     SLAM::Lidar* lidar = new SLAM::Lidar(PORT, mapper);
     SLAM::MotorControllerInterface* motorController = new SLAM::MotorController();    
-    TcpController* tcpController = new TcpController(motorController);
+    //TcpController* tcpController = new TcpController(motorController);
 
     // Start LIDAR
     bool success = lidar->setup();
@@ -52,7 +54,7 @@ int main()
 
     // Run threads
     std::thread lidarThread(&SLAM::Lidar::run, lidar);
-    std::thread controllerThread(&TcpController::run, tcpController);
+    // std::thread controllerThread(&TcpController::run, tcpController);
 
     // Wait for Ctrl-C
     while (!ctrl_c_pressed)
@@ -68,13 +70,13 @@ int main()
     lidarThread.join();    
 
     // Stop TCP Controller
-    tcpController->terminate();
-    controllerThread.join();
+    //tcpController->terminate();
+    //controllerThread.join();
 
     delete mapper;
     delete lidar;
     delete motorController;
-    delete tcpController;
+    // delete tcpController;
 
     return 0;
 }

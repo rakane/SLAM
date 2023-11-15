@@ -27,6 +27,8 @@ SLAM::Map::Map(): polarMap_(), cartesianMap_()
             cartesianMap_.insert(cartesianPair);
         }
     }
+
+    std::cout << "Map initialization complete!" << std::endl;
 }
 
 SLAM::Map::~Map()

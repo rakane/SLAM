@@ -25,7 +25,7 @@ namespace SLAM
     
     const int MAX_X_SIZE = std::round(5.0 * 1000.0); // 10 m in mm
     const int MAX_Y_SIZE = std::round(5.0 * 1000.0); // 10 m in mm
-    const unsigned int CARTESTIAN_MAP_RESOLUTION = 10; // mm resolution
+    const unsigned int CARTESTIAN_MAP_RESOLUTION = 100; // mm resolution
     const unsigned int MAX_MAP_POINTS = std::round(MAX_X_SIZE * MAX_Y_SIZE / (CARTESTIAN_MAP_RESOLUTION * CARTESTIAN_MAP_RESOLUTION));
     const unsigned int NUM_POLAR_ANGLES = std::round(360.0 / ANGLE_RESOLUTION);
     const double MAX_POLAR_DISTANCE = std::sqrt(MAX_X_SIZE * MAX_X_SIZE + MAX_Y_SIZE * MAX_Y_SIZE);
