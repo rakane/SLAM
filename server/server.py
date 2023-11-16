@@ -52,6 +52,8 @@ def upload_map():
     distances = data['distance']
     x = data['x']
     y = data['y']
+    latestAngle = data['latestAngle']
+    latestDistance = data['latestDistance']
     resolutionMillis = data['resolution']
 
     ########################################
@@ -79,6 +81,29 @@ def upload_map():
     plt.polar(angles, distances, 'ro', markersize=2)
     plt.title('Lidar Scan in meters')
     plt.savefig('./static/polar_map.png')
+
+    ########################################
+    # Latest Polar plot
+    ########################################
+    latestAngle.pop()
+    latestDistance.pop()
+
+    for i in range(len(latestAngle)):
+        latestAngle[i] = math.radians(latestAngle[i])
+    
+    for i in range(len(latestDistance)):
+        latestDistance[i] = latestDistance[i] / 1000
+
+    if(len(latestAngle) != len(latestDistance)):
+        return json.dumps({'status': 0})
+    
+    if(len(latestAngle) == 0):
+        return json.dumps({'status': 0})
+
+    plt.clf()
+    plt.polar(latestAngle, latestDistance, 'ro', markersize=2)
+    plt.title('Latest Lidar Scan in meters')
+    plt.savefig('./static/polar_map_latest.png')
 
     ########################################
     # Cartesian plot
@@ -137,6 +162,23 @@ def get_polar_image():
 
     return jsonify({'image': data, 'last_updated': file_update_time})
 
+@app.route("/image/polar/latest", methods=['GET'])
+def get_polar_image_latest():
+    # Open image
+    file = open("./static/polar_map_latest.png", "rb")
+
+    if not file:
+        return jsonify({'image': ''})
+
+    # Get file update time
+    file_update_time = os.path.getmtime("./static/polar_map_latest.png")
+
+    # Send as base64 encoded image
+    data = file.read()
+    data = base64.b64encode(data).decode()
+
+    return jsonify({'image': data, 'last_updated': file_update_time})
+
 @app.route("/image/cartesian", methods=['GET'])
 def get_cartesian_image():
     # Open image
@@ -157,6 +199,11 @@ def get_cartesian_image():
 @app.route("/image/polar/direct", methods=['GET'])
 def get_polar_image_direct():
     return send_file("./static/polar_map.png", mimetype='image/png')
+
+@app.route("/image/polar/latest/direct", methods=['GET'])
+def get_polar_image__latest_direct():
+    return send_file("./static/polar_map_latest.png", mimetype='image/png')
+
 
 @app.route("/image/cartesian/direct", methods=['GET'])
 def get_cartesian_image_direct():

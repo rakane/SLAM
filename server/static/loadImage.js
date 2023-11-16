@@ -16,6 +16,25 @@ function loadPolarImage() {
   });
 }
 
+function loadLatestPolarImage() {
+  $.ajax({
+    url: "/image/polar/latest",
+    type: "GET",
+    success: function (data) {
+      if (typeof data.image === "string") {
+        if (data.image.length === 0) {
+          return;
+        }
+
+        $("#polar_latest img").attr(
+          "src",
+          `data:image/png;base64,${data.image}`
+        );
+      }
+    },
+  });
+}
+
 function loadCartesianImage() {
   $.ajax({
     url: "/image/cartesian",
@@ -34,6 +53,7 @@ function loadCartesianImage() {
 
 $(document).ready(function () {
   $("#polar").html('<img src="/image/polar/direct" />');
+  $("#polar_latest").html('<img src="/image/polar/latest/direct" />');
   $("#cartesian").html('<img src="/image/cartesian/direct" />');
 });
 
@@ -54,9 +74,11 @@ window.setInterval(function () {
 
   if (LOAD_DIRECT) {
     loadPolarImage();
+    loadLatestPolarImage();
     loadCartesianImage();
   } else {
     $("#polar").html('<img src="/image/polar/direct" />');
+    $("#polar_latest").html('<img src="/image/polar/latest/direct" />');
     $("#cartesian").html('<img src="/image/cartesian/direct" />');
   }
 }, 250);
