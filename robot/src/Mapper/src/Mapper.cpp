@@ -59,6 +59,8 @@ void SLAM::Mapper::uploadMapData(MeasurementNode measurement[], unsigned int num
     std::stringstream distanceSStream;
     std::stringstream xSStream;
     std::stringstream ySStream;
+    std::stringstream measAngleSStream;
+    std::stringstream measDistanceSStream;
 
     for (PolarMap::const_iterator it = polarMap.begin(); it != polarMap.end(); it++)
     {
@@ -78,11 +80,19 @@ void SLAM::Mapper::uploadMapData(MeasurementNode measurement[], unsigned int num
         }
     }
 
+    for(unsigned int measIdx = 0; measIdx < numMeasurements; measIdx++)
+    {
+        measAngleSStream << measurement[measIdx].angle << ",";
+        measDistanceSStream << measurement[measIdx].distance << ",";
+    }
+
     // Add dummy element
     angleSStream << "0";
     distanceSStream << "0";
     xSStream << "0";
     ySStream << "0";
+    measAngleSStream << "0";
+    measDistanceSStream << "0";
 
     std::stringstream ss;
     ss << "curl -X POST " << SERVER_URL << ":8080/upload -H \"Content-Type: application/json\"";
@@ -90,6 +100,8 @@ void SLAM::Mapper::uploadMapData(MeasurementNode measurement[], unsigned int num
     ss << " \"distance\": [" << distanceSStream.str() << "],";
     ss << " \"x\": [" << xSStream.str() << "],";
     ss << " \"y\": [" << ySStream.str() << "],";
+    ss << " \"latestAngle\": [" << measAngleSStream.str() << "],";
+    ss << " \"latestDistance\": [" << measDistanceSStream.str() << "],";
     ss << " \"resolution\": " << CARTESTIAN_MAP_RESOLUTION << "}'";
 
     // Pipe output to /dev/null

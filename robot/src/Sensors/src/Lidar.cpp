@@ -4,7 +4,7 @@
 
 #include "Lidar.h"
 
-SLAM::Lidar::Lidar(const char* port, Mapper* mapper)
+SLAM::Lidar::Lidar(const char* port, MapperInterface* mapper)
 {
     comPort_ = port;
     mapper_ = mapper;

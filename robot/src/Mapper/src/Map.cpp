@@ -91,10 +91,10 @@ bool SLAM::Map::updateMap(SLAM::MeasurementNode measurement)
         roundedAngle -= 360.0;
     }
 
-    PolarMap::iterator it = polarMap_.find(roundedAngle);
-    if(it != polarMap_.end())
+    PolarMap::iterator polarIter = polarMap_.find(roundedAngle);
+    if(polarIter != polarMap_.end())
     {
-        it->second = measurement.distance;
+        polarIter->second = measurement.distance;
     }
     else
     {
@@ -105,63 +105,51 @@ bool SLAM::Map::updateMap(SLAM::MeasurementNode measurement)
     // then check if there are any points marked true on the map, if so, mark them as false since
     // they did not get updated by the lidar. Then set the updated point to true below.
 
-    // Build list of all distance from 0 to measurement.distance, at a step of CARTESTIAN_MAP_RESOLUTION / 2
-    std::vector<double> distances;
-    distances.reserve(measurement.distance / (CARTESTIAN_MAP_RESOLUTION / 2.0));
-    double stepSize = CARTESTIAN_MAP_RESOLUTION / 2.0;
-    for (double i = 0; i < measurement.distance; i += stepSize)
-    {
-        distances.push_back(i);
-    }
+    double measurementRadians = measurement.angle * M_PI / 180.0;
+    double cartesianXFactor = std::cos(measurementRadians);
+    double cartesianYFactor = std::sin(measurementRadians);
 
-    // Convert to cartesian coordinates for each distance
-    std::vector<CartesianPoint> points;
-    points.reserve(distances.size());
+    // Build list of all distance from 0 to measurement.distance, at a step of CARTESTIAN_MAP_RESOLUTION / 2
+    double stepSize = CARTESTIAN_MAP_RESOLUTION / 2.0;
 
     double x, y;
-    int roundedX, roundedY;
-    for(unsigned int distanceIdx = 0; distanceIdx < distances.size(); distanceIdx++)
+    CartesianPoint point;
+    for(double distance = 0.0; distance < measurement.distance; distance += stepSize)
     {
-        x = distances[distanceIdx] * std::cos(measurement.angle * M_PI / 180.0);
-        y = distances[distanceIdx] * std::sin(measurement.angle * M_PI / 180.0);
-        roundedX = std::round(x / CARTESTIAN_MAP_RESOLUTION) * CARTESTIAN_MAP_RESOLUTION;
-        roundedY = std::round(y / CARTESTIAN_MAP_RESOLUTION) * CARTESTIAN_MAP_RESOLUTION;
+        x = distance * cartesianXFactor;
+        y = distance * cartesianYFactor;
+        point.first = std::round(x / CARTESTIAN_MAP_RESOLUTION) * CARTESTIAN_MAP_RESOLUTION;
+        point.second = std::round(y / CARTESTIAN_MAP_RESOLUTION) * CARTESTIAN_MAP_RESOLUTION;
 
-        points.emplace_back(roundedX, roundedY);
-    }
-
-    // Set all points to false in cartesian map, as they did not get updated by the lidar
-    for(unsigned int pointIdx = 0; pointIdx < points.size(); pointIdx++)
-    {
-        CartesianMap::iterator it2 = cartesianMap_.find(points[pointIdx]);
-        if(it2 != cartesianMap_.end())
+        // Set all points to false in cartesian map, as they did not get updated by the lidar
+        CartesianMap::iterator cartesianIter = cartesianMap_.find(point);
+        if(cartesianIter != cartesianMap_.end())
         {
-            it2->second = false;
+            cartesianIter->second = false;
         } 
         else
         {
-            std::cout << "Position not found in cartesian map! x: " << points[pointIdx].first << " y: " << points[pointIdx].second << std::endl;
+            std::cout << "Position not found in cartesian map! x: " << point.first << " y: " << point.second << std::endl;
         }
     }
 
     // Convert to cartesian coordinates
-    x = measurement.distance * std::cos(measurement.angle * M_PI / 180.0);
-    y = measurement.distance * std::sin(measurement.angle * M_PI / 180.0);
+    x = measurement.distance * cartesianXFactor;
+    y = measurement.distance * cartesianYFactor;
 
     // Round x and y to nearest CARTESTIAN_MAP_RESOLUTION
-    roundedX = std::round(x / static_cast<double>(CARTESTIAN_MAP_RESOLUTION)) * CARTESTIAN_MAP_RESOLUTION;
-    roundedY = std::round(y / static_cast<double>(CARTESTIAN_MAP_RESOLUTION)) * CARTESTIAN_MAP_RESOLUTION;
+    point.first = std::round(x / static_cast<double>(CARTESTIAN_MAP_RESOLUTION)) * CARTESTIAN_MAP_RESOLUTION;
+    point.second = std::round(y / static_cast<double>(CARTESTIAN_MAP_RESOLUTION)) * CARTESTIAN_MAP_RESOLUTION;
 
-    CartesianPoint point = std::make_pair(roundedX, roundedY);
-    CartesianMap::iterator it2 = cartesianMap_.find(point);
+    CartesianMap::iterator cartesianIter = cartesianMap_.find(point);
 
-    if(it2 != cartesianMap_.end())
+    if(cartesianIter != cartesianMap_.end())
     {
-        it2->second = true;
+        cartesianIter->second = true;
     }
     else
     {
-        std::cout << "Position not found in cartesian map! x: " << roundedX << " y: " << roundedY << std::endl;
+        std::cout << "Position not found in cartesian map! x: " << point.first << " y: " << point.second << std::endl;
     }
 
     return true;
