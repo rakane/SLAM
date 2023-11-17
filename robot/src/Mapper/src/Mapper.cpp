@@ -17,11 +17,6 @@ SLAM::Mapper::~Mapper()
 {
 }
 
-void SLAM::Mapper::reset()
-{
-    map_.resetMap();
-}
-
 void SLAM::Mapper::processMeasurementData(MeasurementNode measurement[], unsigned int numMeasurements)
 {
     std::cout << "Processing measurement data" << std::endl;

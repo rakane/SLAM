@@ -38,7 +38,7 @@ int main()
     // Trap Ctrl-C
     signal(SIGINT, ctrlc);
 
-    SLAM::Mapper* mapper = new SLAM::Mapper();
+    SLAM::MapperInterface* mapper = new SLAM::Mapper();
     SLAM::Lidar* lidar = new SLAM::Lidar(PORT, mapper);
     SLAM::MotorControllerInterface* motorController = new SLAM::MotorController();    
     //TcpController* tcpController = new TcpController(motorController);

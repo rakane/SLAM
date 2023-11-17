@@ -7,19 +7,16 @@
 #include <map>
 #include <chrono>
 
-#include "Map.h"
+#include "MapperInterface.h"
 
 namespace SLAM
 {
-    const unsigned int MAX_MEASUREMENTS = 8192;
-
-    class Mapper
+    class Mapper: public MapperInterface
     {
     public:
         Mapper(double uploadInterval = 0.0, bool enableMapUploading = true);
         ~Mapper();
         
-        void reset();
         void processMeasurementData(MeasurementNode measurement[], unsigned int numMeasurements);
     private:
         void uploadMapData(MeasurementNode measurement[], unsigned int numMeasurements) const;

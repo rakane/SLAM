@@ -8,7 +8,7 @@
 // RPLIDAR sdk
 #include "../../../include/rplidar/rplidar.h"
 
-#include "../../Mapper/src/Mapper.h"
+#include "../../Mapper/src/MapperInterface.h"
 
 #ifndef _countof
 #define _countof(_Array) (int)(sizeof(_Array) / sizeof(_Array[0]))
@@ -29,7 +29,7 @@ namespace SLAM
     class Lidar
     {
     public:
-        Lidar(const char* port, Mapper* mapper);
+        Lidar(const char* port, MapperInterface* mapper);
         ~Lidar();
         
         bool setup();
@@ -45,7 +45,7 @@ namespace SLAM
         RPlidarDriver* driver_;
 
         // Mapper
-        Mapper* mapper_;
+        MapperInterface* mapper_;
     };
 }
 
