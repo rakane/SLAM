@@ -5,17 +5,20 @@ This is a working experiment to create a basic SLAM robot using a RPLidar A1 and
 ## Roadmap
 
 - [x] Get Lidar working plugged into computer (UART communication via USB)
-- [x] Create basic python server using Flask to get Lidar data from robot program and plot it
+- [x] Create display map from lidar data
+  - [x] Create Flask server to receive lidar data
+  - [x] Upload lidar data to server via TCP
   - [x] Create very simple polar and cartesian map of lidar data
-  - [x] Upload to server and save plots, server via Flask to webpage
+  - [x] Save plots on server on every data upload, serve via Flask to webpage for display UI
 - [ ] Remote controller car setup
   - [x] 4 wheel motor controller setup with L298N H-Bridge
   - [x] TCP remote controller (use web interface to send direction commands for now)
-  - [ ] Beaglebone connected to lidar via UART
+  - [x] Beaglebone connected to lidar via UART
+  - [x] Assembly on car chassis (wired power)
   - [ ] Battery and power management
-  - [ ] Assembly on car chassis
-- [ ] Create basic SLAM algorithm
-  - [ ] SLAM Algorithm Research and Implementation
+- [ ] SLAM Algorithm Research and Implementation
+  - [ ] EKF SLAM vs. FastSLAM
+  - [ ] Implement SLAM algorithm
 - [ ] Who knows what else...
 
 ## Resources
