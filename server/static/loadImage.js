@@ -51,10 +51,30 @@ function loadCartesianImage() {
   });
 }
 
+function loadCalibrationImage() {
+  $.ajax({
+    url: "/image/calibration",
+    type: "GET",
+    success: function (data) {
+      if (typeof data.image === "string") {
+        if (data.image.length === 0) {
+          return;
+        }
+
+        $("#calibration img").attr(
+          "src",
+          `data:image/png;base64,${data.image}`
+        );
+      }
+    },
+  });
+}
+
 $(document).ready(function () {
   $("#polar").html('<img src="/image/polar/direct" />');
   $("#polar_latest").html('<img src="/image/polar/latest/direct" />');
   $("#cartesian").html('<img src="/image/cartesian/direct" />');
+  $("#calibration").html('<img src="/image/calibration/direct" />');
 });
 
 let isVisible = true;
@@ -76,9 +96,11 @@ window.setInterval(function () {
     loadPolarImage();
     loadLatestPolarImage();
     loadCartesianImage();
+    loadCalibrationImage();
   } else {
     $("#polar").html('<img src="/image/polar/direct" />');
     $("#polar_latest").html('<img src="/image/polar/latest/direct" />');
     $("#cartesian").html('<img src="/image/cartesian/direct" />');
+    $("#calibration").html('<img src="/image/calibration/direct" />');
   }
 }, 250);

@@ -141,6 +141,35 @@ def upload_map():
 
     return json.dumps({'status': 1})
 
+@app.route("/upload/calibration", methods=['POST'])
+def upload_calibration_data():
+    data = json.loads(request.data)
+    angles = data['angle']
+    distances = data['distance']
+    angleMin = data['angleMin']
+    angleMax = data['angleMax']
+    resolutionDegrees = data['resolution']
+
+    # Remove last element from both arrays
+    angles.pop()
+    distances.pop()
+
+    if(len(angles) != len(distances)):
+        return json.dumps({'status': 0})
+    
+    if(len(angles) == 0):
+        return json.dumps({'status': 0})
+
+    plt.clf()
+    plt.plot(angles, distances, 'ro', markersize=2)
+    plt.title('Lidar calibration data')
+    plt.xlabel('Angle (degrees)')
+    plt.ylabel('Distance (mm)')
+    # plt.axes().set_xlim(angleMin, angleMax)
+    plt.savefig('./static/lidar_calibration.png')
+
+    return json.dumps({'status': 1})
+
 @app.route("/", methods=['GET'])
 def show_plot():
     return render_template("index.html")
@@ -196,6 +225,23 @@ def get_cartesian_image():
 
     return jsonify({'image': data, 'last_updated': file_update_time})
 
+@app.route("/image/calibration", methods=['GET'])
+def get_calibration_image():
+    # Open image
+    file = open("./static/lidar_calibration.png", "rb")
+
+    if not file:
+        return jsonify({'image': ''})
+    
+    # Get file update time
+    file_update_time = os.path.getmtime("./static/lidar_calibration.png")
+
+    # Send as base64 encoded image
+    data = file.read()
+    data = base64.b64encode(data).decode()
+
+    return jsonify({'image': data, 'last_updated': file_update_time})
+
 @app.route("/image/polar/direct", methods=['GET'])
 def get_polar_image_direct():
     return send_file("./static/polar_map.png", mimetype='image/png')
@@ -204,10 +250,13 @@ def get_polar_image_direct():
 def get_polar_image__latest_direct():
     return send_file("./static/polar_map_latest.png", mimetype='image/png')
 
-
 @app.route("/image/cartesian/direct", methods=['GET'])
 def get_cartesian_image_direct():
     return send_file("./static/cartesian_map.png", mimetype='image/png')
+
+@app.route("/image/calibration/direct", methods=['GET'])
+def get_calibration_image_direct():
+    return send_file("./static/lidar_calibration.png", mimetype='image/png')
 
 @app.after_request
 def add_header(response):
