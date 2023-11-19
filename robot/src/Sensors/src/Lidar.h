@@ -29,7 +29,7 @@ namespace SLAM
     class Lidar
     {
     public:
-        Lidar(const char* port, MapperInterface* mapper);
+        Lidar(const char* port, MapperInterface* mapper, double maxDistance = 0.0);
         ~Lidar();
         
         bool setup();
@@ -38,11 +38,17 @@ namespace SLAM
     private:
         bool checkRPLIDARHealth();
 
+        // RP Lidar Config
         const char * comPort_;
         _u32 baudrate_;
         u_result opResult_;
-        LidarStatus status_;
         RPlidarDriver* driver_;
+    
+        // Limit sensor measurement distance        
+        double maxDistance_;
+
+        // Lidar status
+        LidarStatus status_;
 
         // Mapper
         MapperInterface* mapper_;

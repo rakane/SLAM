@@ -18,6 +18,7 @@ void ctrlc(int)
     ctrl_c_pressed = true;
 }
 
+#define SERVER_URL "192.168.1.172"
 // #define PORT "/dev/tty.SLAB_USBtoUART"   // macOS UART for RPLIDAR
 #define PORT "/dev/ttyUSB0"
 #define RUN_TCP_CONTROLLER false
@@ -38,7 +39,7 @@ int main()
     // Trap Ctrl-C
     signal(SIGINT, ctrlc);
 
-    SLAM::MapperInterface* mapper = new SLAM::Mapper();
+    SLAM::MapperInterface* mapper = new SLAM::Mapper(SERVER_URL);
     SLAM::Lidar* lidar = new SLAM::Lidar(PORT, mapper);
     SLAM::MotorControllerInterface* motorController = new SLAM::MotorController();    
     //TcpController* tcpController = new TcpController(motorController);

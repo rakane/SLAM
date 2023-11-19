@@ -4,13 +4,14 @@
 
 #include "Lidar.h"
 
-SLAM::Lidar::Lidar(const char* port, MapperInterface* mapper)
+SLAM::Lidar::Lidar(const char* port, MapperInterface* mapper, double maxDistance)
 {
     comPort_ = port;
     mapper_ = mapper;
     status_ = LidarStatus::SHUTDOWN;
     baudrate_ = 115200;
     driver_ = RPlidarDriver::CreateDriver(DRIVER_TYPE_SERIALPORT);
+    maxDistance_ = maxDistance;
 }
 
 SLAM::Lidar::~Lidar()
@@ -98,15 +99,21 @@ void SLAM::Lidar::run()
 
                 SLAM::MeasurementNode measurement[8192];
                 int measurementIdx = 0;
+                double distance;
                 for (int pos = 0; pos < (int)count ; ++pos) 
                 {
                     if(nodes[pos].quality != 0)
                     {
-                        measurement[measurementIdx].angle = nodes[pos].angle_z_q14 * 90.f / (1 << 14);
-                        measurement[measurementIdx].distance = nodes[pos].dist_mm_q2 / 4.0f;
-                        measurement[measurementIdx].distanceVariance = 1.0; // millimeters, based on limited experimental data                        
-
-                        measurementIdx++;
+                        distance = nodes[pos].dist_mm_q2 / 4.0f;
+                        
+                        if(!(maxDistance_ > 0.0) || distance < maxDistance_)
+                        {
+                            measurement[measurementIdx].angle = nodes[pos].angle_z_q14 * 90.f / (1 << 14);
+                            measurement[measurementIdx].distance = distance;
+                            measurement[measurementIdx].distanceVariance = 1.0; // millimeters, based on limited experimental data                        
+                    
+                            measurementIdx++;
+                        }
                     }
                 }
 

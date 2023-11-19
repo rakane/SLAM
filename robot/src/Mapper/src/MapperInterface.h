@@ -1,10 +1,15 @@
 #ifndef MAPPER_INTERFACE_H
 #define MAPPER_INTERFACE_H
 
-#include "Map.h"
-
 namespace SLAM
 {
+    struct MeasurementNode 
+    {
+        float angle; // degrees
+        float distance; // millimeters
+        float distanceVariance; // millimeters
+    };
+
     class MapperInterface
     {
     public:

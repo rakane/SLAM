@@ -1,9 +1,15 @@
 #include <vector>
 
+#include "DisplayMap.h"
 
-#include "Map.h"
-
-SLAM::Map::Map(): polarMap_(), cartesianMap_()
+SLAM::DisplayMap::DisplayMap(std::string serverUrl, double uploadInterval, bool enableMapUploading)
+    : polarMap_(), 
+      cartesianMap_(),
+      serverUrl_(serverUrl),
+      enableMapUploading_(enableMapUploading),
+      throttleUploads_(uploadInterval > 0.0), 
+      uploadInterval_(uploadInterval),
+      lastUploadTime_(std::chrono::system_clock::now())
 {
     // Fill in map with default values
     std::cout << "Initializing map..." << std::endl;
@@ -31,56 +37,41 @@ SLAM::Map::Map(): polarMap_(), cartesianMap_()
     std::cout << "Map initialization complete!" << std::endl;
 }
 
-SLAM::Map::~Map()
+SLAM::DisplayMap::~DisplayMap()
 {
 }
 
-const SLAM::PolarMap& SLAM::Map::getPolarMap() const
+bool SLAM::DisplayMap::update(SLAM::MeasurementNode measurements[], unsigned int numMeasurements)
 {
-    return polarMap_;
-}
-
-const SLAM::CartesianMap& SLAM::Map::getCartesianMap() const
-{
-    return cartesianMap_;
-}
-
-double SLAM::Map::getPolarPoint(double angle) const
-{
-    // Ensure angle is rounded to nearest ANGLE_RESOLUTION
-    double roundedAngle = std::round(angle / ANGLE_RESOLUTION) * ANGLE_RESOLUTION;
-
-    PolarMap::const_iterator it = polarMap_.find(roundedAngle);
-    if (it != polarMap_.end())
+    for(unsigned int measIdx = 0; measIdx < numMeasurements; measIdx++)
     {
-        return it->second;
+        update(measurements[measIdx]);
     }
-    else
+ 
+    // Upload map data if enabled
+    if(enableMapUploading_)
     {
-        return MAX_POLAR_DISTANCE;
+        if(throttleUploads_)
+        {
+            std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+            std::chrono::duration<double> elapsedSinceLastUpload = now - lastUploadTime_;
+
+            if(elapsedSinceLastUpload.count() < uploadInterval_)
+            {
+                return true;
+            }
+
+            // Update last upload time 
+            lastUploadTime_ = now;
+        }
+
+        uploadMap(measurements, numMeasurements);
     }
+
+    return true;
 }
 
-bool SLAM::Map::getCartesianPoint(double x, double y) const
-{
-    // Ensure x and y are rounded to nearest CARTESTIAN_MAP_RESOLUTION
-    int roundedX = std::round(x / CARTESTIAN_MAP_RESOLUTION) * CARTESTIAN_MAP_RESOLUTION;
-    int roundedY = std::round(y / CARTESTIAN_MAP_RESOLUTION) * CARTESTIAN_MAP_RESOLUTION;
-
-    CartesianPoint point = std::make_pair(roundedX, roundedY);
-    CartesianMap::const_iterator it = cartesianMap_.find(point); // findCartesianPoint(point);
-
-    if (it != cartesianMap_.end())
-    {
-        return it->second;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool SLAM::Map::updateMap(SLAM::MeasurementNode measurement)
+void SLAM::DisplayMap::update(const SLAM::MeasurementNode& measurement)
 {
     // Measurement already in polar coordinates, round angle to nearest ANGLE_RESOLUTION
     double roundedAngle = std::round(measurement.angle / ANGLE_RESOLUTION) * ANGLE_RESOLUTION;
@@ -151,12 +142,77 @@ bool SLAM::Map::updateMap(SLAM::MeasurementNode measurement)
     {
         std::cout << "Position not found in cartesian map! x: " << point.first << " y: " << point.second << std::endl;
     }
-
-    return true;
 }
 
-void SLAM::Map::resetMap()
+void SLAM::DisplayMap::resetMap()
 {
     polarMap_.clear();
     cartesianMap_.clear();
+}
+
+void SLAM::DisplayMap::uploadMap(MeasurementNode measurements[], unsigned int numMeasurements) const
+{
+    // Make a string stream for CURL request
+    std::stringstream angleSStream;
+    std::stringstream distanceSStream;
+    std::stringstream xSStream;
+    std::stringstream ySStream;
+    std::stringstream measAngleSStream;
+    std::stringstream measDistanceSStream;
+
+    for (PolarMap::const_iterator it = polarMap_.begin(); it != polarMap_.end(); it++)
+    {
+        if(it->second < MAX_POLAR_DISTANCE)
+        {
+            angleSStream << it->first << ",";
+            distanceSStream << it->second << ",";
+        }
+    }
+
+    for (CartesianMap::const_iterator it = cartesianMap_.begin(); it != cartesianMap_.end(); it++)
+    {
+        if(it->second)
+        {
+            xSStream << it->first.first << ",";
+            ySStream << it->first.second << ",";
+        }
+    }
+
+    for(unsigned int measIdx = 0; measIdx < numMeasurements; measIdx++)
+    {
+        measAngleSStream << measurements[measIdx].angle << ",";
+        measDistanceSStream << measurements[measIdx].distance << ",";
+    }
+
+    // Add dummy element
+    angleSStream << "0";
+    distanceSStream << "0";
+    xSStream << "0";
+    ySStream << "0";
+    measAngleSStream << "0";
+    measDistanceSStream << "0";
+
+    std::stringstream ss;
+    ss << "curl -X POST " << serverUrl_ << ":8080/upload -H \"Content-Type: application/json\"";
+    ss << " -d '{\"angle\": [" << angleSStream.str() << "],";
+    ss << " \"distance\": [" << distanceSStream.str() << "],";
+    ss << " \"x\": [" << xSStream.str() << "],";
+    ss << " \"y\": [" << ySStream.str() << "],";
+    ss << " \"latestAngle\": [" << measAngleSStream.str() << "],";
+    ss << " \"latestDistance\": [" << measDistanceSStream.str() << "],";
+    ss << " \"resolution\": " << CARTESTIAN_MAP_RESOLUTION << "}'";
+
+    // Pipe output to /dev/null
+    ss << " > /dev/null 2>&1";
+    ss << " &";
+
+    try
+    {
+        std::string command = ss.str();
+        system(command.c_str());
+    }
+    catch (...)
+    {
+        std::cout << "Failed to upload polar map data" << std::endl;
+    }
 }

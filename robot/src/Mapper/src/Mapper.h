@@ -1,35 +1,23 @@
 #ifndef MAPPER_H
 #define MAPPER_H
 
-#include <iostream>
-#include <iomanip>
-#include <stdio.h>
-#include <map>
-#include <chrono>
+#include <string>
 
 #include "MapperInterface.h"
+#include "DisplayMap.h"
 
 namespace SLAM
 {
     class Mapper: public MapperInterface
     {
     public:
-        Mapper(double uploadInterval = 0.0, bool enableMapUploading = true);
+        Mapper(std::string serverUrl, double uploadInterval = 0.0, bool enableMapUploading = true);
         ~Mapper();
         
-        void processMeasurementData(MeasurementNode measurement[], unsigned int numMeasurements);
+        void processMeasurementData(MeasurementNode measurements[], unsigned int numMeasurements);
     private:
-        void uploadMapData(MeasurementNode measurement[], unsigned int numMeasurements) const;
-
-        Map map_;
-
-        bool enableMapUploading_;
-
-        bool throttleUploads_;
-
-        double uploadInterval_;
-
-        std::chrono ::time_point<std::chrono::system_clock> lastUploadTime_;
+        
+        DisplayMap displayMap_; 
     };
 }
 
