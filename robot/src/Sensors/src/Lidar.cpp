@@ -104,6 +104,7 @@ void SLAM::Lidar::run()
                     {
                         measurement[measurementIdx].angle = nodes[pos].angle_z_q14 * 90.f / (1 << 14);
                         measurement[measurementIdx].distance = nodes[pos].dist_mm_q2 / 4.0f;
+                        measurement[measurementIdx].distanceVariance = 1.0; // millimeters, based on limited experimental data                        
 
                         measurementIdx++;
                     }

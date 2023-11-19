@@ -12,6 +12,7 @@ namespace SLAM
     struct MeasurementNode {
         float angle; // degrees
         float distance; // millimeters
+        float distanceVariance; // millimeters
     };
 
     typedef std::map<double, double> PolarMap;        

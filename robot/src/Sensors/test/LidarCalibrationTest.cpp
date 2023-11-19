@@ -22,21 +22,36 @@ void ctrlc(int)
 
 using namespace rp::standalone::rplidar;
 
-int main()
+int main(int argc, char **argv)
 {
-    std::cout << "SLAM Experiment Configuration: " << std::endl;
-    std::cout << "ANGLE_RESOLUTION: " << SLAM::ANGLE_RESOLUTION << std::endl;
-    std::cout << "MAX_X_SIZE (mm): " << SLAM::MAX_X_SIZE << std::endl;
-    std::cout << "MAX_Y_SIZE (mm): " << SLAM::MAX_Y_SIZE << std::endl;
-    std::cout << "CARTESTIAN_MAP_RESOLUTION: " << SLAM::CARTESTIAN_MAP_RESOLUTION << std::endl; 
-    std::cout << "MAX_MAP_POINTS: " << SLAM::MAX_MAP_POINTS << std::endl;
-    std::cout << "NUM_POLAR_ANGLES: " << SLAM::NUM_POLAR_ANGLES << std::endl;
-    std::cout << "MAX_POLAR_DISTANCE: " << SLAM::MAX_POLAR_DISTANCE << std::endl;
+    float ANGLE_MIN = 15.0;
+    float ANGLE_MAX = 45.0;
+    float ANGLE_RESOLUTION = 1.0;
+    unsigned long long MAX_SCAN_COUNT = 100;
+
+    if(argc == 5)
+    {
+        std::cout << "Calibration parameter overrides: " << std::endl;
+
+        ANGLE_MIN = atof(argv[1]);
+        ANGLE_MAX = atof(argv[2]);
+        ANGLE_RESOLUTION = atof(argv[3]);    
+        MAX_SCAN_COUNT = atoi(argv[4]);
+
+        std::cout << "\tANGLE_MIN: " << ANGLE_MIN << std::endl;
+        std::cout << "\tANGLE_MAX: " << ANGLE_MAX << std::endl;
+        std::cout << "\tANGLE_RESOLUTION: " << ANGLE_RESOLUTION << std::endl;
+        std::cout << "\tMAX_SCAN_COUNT: " << MAX_SCAN_COUNT << std::endl;    
+    } 
+    else if(argc != 1)
+    {
+        std::cout << "Bad arguement usage: LidarCalibrationTest <angle min> <angle max> <angle resolution> <max scan count>\n";
+    }
 
     // Trap Ctrl-C
     signal(SIGINT, ctrlc);
 
-    SLAM::MapperInterface* calibrator = new LidarCalibrationTest::Calibrator();
+    SLAM::MapperInterface* calibrator = new LidarCalibrationTest::Calibrator(ANGLE_MIN, ANGLE_MAX, ANGLE_RESOLUTION, MAX_SCAN_COUNT);
     SLAM::Lidar* lidar = new SLAM::Lidar(PORT, calibrator);
 
     // Start LIDAR
