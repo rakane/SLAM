@@ -79,7 +79,7 @@ def upload_map():
 
     plt.clf()
     plt.polar(angles, distances, 'ro', markersize=2)
-    plt.title('Lidar Scan in meters')
+    plt.title('Environment Map in meters')
     plt.savefig('./static/polar_map.png')
 
     ########################################
